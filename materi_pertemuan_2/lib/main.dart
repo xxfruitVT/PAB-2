@@ -14,11 +14,13 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Daftar Karyawan',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      home: const MyHomePage(),
     );
   }
 }
@@ -50,6 +52,15 @@ class MyHomePage extends StatelessWidget {
                   title: Text(
                     snapshot.data![index].nama,
                     style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Umur : ${snapshot.data![index].umur} tahun'),
+                      Text('Alamat : ${snapshot.data![index].alamat.jalan},'
+                          '${snapshot.data![index].alamat.kota},'
+                          '${snapshot.data![index].alamat.provinsi}'),
+                    ],
                   ),
                 );
               },
