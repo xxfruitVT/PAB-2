@@ -1,4 +1,5 @@
 import 'package:fasum/screens/home_screen.dart';
+import 'package:fasum/screens/sign_up_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  String _erorMassage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,10 +49,30 @@ class _SignInScreenState extends State<SignInScreen> {
                       email: _emailController.text,
                       password: _emailController.text,
                     );
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeScreen()));
-                  } catch  {}
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  } catch (eror) {
+                    setState(() {
+                      _erorMassage = eror.toString();
+                    });
+                  }
                 },
-                child: const ,
+                child: const Text('Sign In'),
+              ),
+              const SizedBox(height: 32),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpScreen(),
+                    ),
+                  );
+                },
+                child: child,
               ),
             ],
           ),
