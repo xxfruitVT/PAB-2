@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:fasum_test/screens/home_screen.dart';
-import 'package:fasum_test/screens/sign_in_screen.dart';
+import 'package:fasum/screens/home_screen.dart';
+import 'package:fasum/screens/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,8 +11,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -28,22 +27,21 @@ class _SplashScreenState extends State<SplashScreen>
     _animation = Tween<double>(
       begin: 0.0,
       end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     _controller.forward();
-
+    
     Timer(const Duration(seconds: 3), () {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const SignInScreen()),
-        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const SignInScreen()));
       }
     });
   }
@@ -61,7 +59,11 @@ class _SplashScreenState extends State<SplashScreen>
       body: Center(
         child: FadeTransition(
           opacity: _animation,
-          child: Image.asset('assets/fasum_icon.png', width: 150, height: 150),
+          child: Image.asset(
+            'assets/fasum_icon.png',
+            width: 150,
+            height: 150,
+          ),  
         ),
       ),
     );

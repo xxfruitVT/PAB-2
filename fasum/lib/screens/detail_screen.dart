@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:fasum_test/screens/full_image_screen.dart';
+
+import 'package:fasum/screens/full_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,8 +44,7 @@ class _DetailScreenState extends State<DetailScreen> {
       );
     }
   }
-
-  @override
+@override
   Widget build(BuildContext context) {
     final createdAtFormatted = DateFormat(
       'dd MMMM yyyy, HH:mm',
@@ -74,12 +74,11 @@ class _DetailScreenState extends State<DetailScreen> {
                     icon: const Icon(Icons.fullscreen, color: Colors.white),
                     onPressed: () {
                       Navigator.push(
-                        context,
+                        context, 
                         MaterialPageRoute(
-                          builder:
-                              (_) => FullscreenImageScreen(
-                                imageBase64: widget.imageBase64,
-                              ),
+                          builder: (_) => FullscreenImageScreen(
+                            imageBase64: widget.imageBase64,
+                          ),
                         ),
                       );
                     },
@@ -91,7 +90,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
               ],
             ),
-            Padding(
+                        Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +120,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                                                        const SizedBox(height: 8),
                             Row(
                               children: [
                                 const Icon(
