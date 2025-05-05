@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fasum_test/screens/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fasum/screens/home_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
-
   @override
   SignUpScreenState createState() => SignUpScreenState();
 }
@@ -71,7 +70,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 16.0),
                   TextFormField(
                     controller: _passwordController,
-                    obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: const OutlineInputBorder(),
@@ -89,6 +87,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
                     ),
+                    obscureText: !_isPasswordVisible,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a password';
@@ -102,7 +101,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 16.0),
                   TextFormField(
                     controller: _confirmPasswordController,
-                    obscureText: !_isConfirmPasswordVisible,
                     decoration: InputDecoration(
                       labelText: 'Confirm Password',
                       border: const OutlineInputBorder(),
@@ -121,6 +119,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
                     ),
+                    obscureText: !_isConfirmPasswordVisible,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please confirm your password';
@@ -135,9 +134,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                   _isLoading
                       ? const CircularProgressIndicator()
                       : ElevatedButton(
-                          onPressed: _signUp,
-                          child: const Text('Sign Up'),
-                        ),
+                        onPressed: _signUp,
+                        child: const Text('Sign Up'),
+                      ),
                 ],
               ),
             ),
@@ -148,33 +147,27 @@ class SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _signUp() async {
-    if (!_formKey.currentState!.validate()) return;
-
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-
     setState(() => _isLoading = true);
-
     try {
-      final userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
           .set({
-        'fullName': _fullNameController.text.trim(),
-        'email': email,
-        'createdAt': Timestamp.now(),
-      });
-
+            'fullName': _fullNameController.text.trim(),
+            'email': email,
+            'createdAt': Timestamp.now(),
+          });
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-        (route) => false,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (route) => false, // Hapus semua route sebelumnya
       );
     } on FirebaseAuthException catch (error) {
       _showErrorMessage(_getAuthErrorMessage(error.code));
@@ -186,14 +179,14 @@ class SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _showErrorMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   bool _isValidEmail(String email) {
     String emailRegex =
-        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zAZ0-9-]+)*$";
     return RegExp(emailRegex).hasMatch(email);
   }
 
